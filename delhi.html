@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport"
+		content="width=device-width,
+				initial-scale=1.0"/>
+                <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+	<!--Fetching from CDN of D3.js -->
+	<script src=
+		"https://d3js.org/d3.v6.min.js">
+	</script>
+</head>
+
+<body>
+    <center>
+
+		<svg width="320px" height="330px">
+		</svg></center>
+
+	
+	<script>
+    const url="https://airocity-server.herokuapp.com/get_aqi?code=Del-6-1-39";
+                async function getdata(url){
+                    const res=await fetch(url);
+                    const datam=await res.json(); 
+                   console.log(datam.result.AQI);
+                var data=[];
+                data[0]=datam.result.Pollutants.CO;
+                data[1]=datam.result.Pollutants.NH3;
+                data[2]=datam.result.Pollutants.NO2;
+                data[3]=datam.result.Pollutants.OZONE;
+                data[4]=datam.result.Pollutants.PM10;
+                data[5]=datam.result.Pollutants.SO2;
+                console.log(data);
+                plott(data);
+                }
+                getdata(url);
+        function plott(data){                
+		// Selecting SVG using d3.select()
+		var svg = d3.select("svg");
+		
+		// Creating Pie generator
+		var pie = d3.pie();
+
+		// Creating arc
+		var arc = d3.arc()
+					.innerRadius(0)
+					.outerRadius(100);
+
+		let g = svg.append("g")
+				.attr("transform", "translate(150,120)");
+
+		// Grouping different arcs
+		var arcs = g.selectAll("arc")
+					.data(pie(data))
+					.enter()
+					.append("g");
+
+		// Appending path
+		arcs.append("path")
+			.attr("fill", (data, i)=>{
+				let value=data.data;
+				return d3.schemeSet3[i+1];
+			})
+			.attr("d", arc);
+		
+		// Adding data to each arc
+		arcs.append("text")
+			.attr("transform",(d)=>{
+					return "translate("+
+					arc.centroid(d) + ")";
+			})
+			.text(function(d){
+			return d.data;
+			});
+        }        
+	</script>
+</body>
+
+</html>
+

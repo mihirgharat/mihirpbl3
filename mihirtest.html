@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    </head>
+    <body>
+        fukk off
+        <script>
+            async function getdata(){
+                const res=await fetch("https://airocity-server.herokuapp.com/get_aqi?code=Del-6-1-9");
+                const data=await res.json();
+                const a=[];
+                a[0]=data.result.Pollutants.CO;
+                a[1]=data.result.Pollutants.NO2;
+                a[2]=data.result.Pollutants.NH3;
+                console.log(a);
+            }
+            getdata();
+        </script>
+
+    </body>
+</html>
